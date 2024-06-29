@@ -47,7 +47,7 @@ namespace CsvTools
                             Console.WriteLine("\t--condition [condition] REQUIRED");
                             Console.WriteLine("\t\tBoolean expression to check for each line. If the returned value is true, the line will be deleted.");
                             Console.WriteLine("\t\tUse column identifier names as variables to refer to specific values, keep the type of the value in mind (string/double).");
-                            Console.WriteLine("\t\tCondition example: id1 == 'example' && id2 + id3 > 5");
+                            Console.WriteLine("\t\tCondition example: Column1 == 'example' && Column2 + Column3 > 5");
                             Console.WriteLine("\t\tSupported methods:");
                             Console.WriteLine("\t\t\tToString(value), Contains(string, string)");
                             Console.WriteLine("\t\t\tNCalc Built-in Functions - https://ncalc.github.io/ncalc/articles/functions.html#built-in-functions");
@@ -69,7 +69,7 @@ namespace CsvTools
                             Console.WriteLine("\t--identifiers [identifier list] REQUIRED");
                             Console.WriteLine("\t\tList of column identifiers separated by comma that specifies which columns should be deleted.");
                             Console.WriteLine("\t\tSpaces are not ignored and are read as part of identifier name.");
-                            Console.WriteLine("\t\tIdentifier list example: id1,id2,id3");
+                            Console.WriteLine("\t\tIdentifier list example: Column1,Column2,Column3");
                             OutputArgumentDescription("--input-file");
                             OutputArgumentDescription("--output-file");
                             OutputArgumentDescription("--overwrite");
@@ -89,7 +89,7 @@ namespace CsvTools
                             Console.WriteLine("\t--identifiers [identifier list] REQUIRED");
                             Console.WriteLine("\t\tList of column identifiers separated by comma that specifies which columns should be analyzed.");
                             Console.WriteLine("\t\tSpaces are not ignored and are read as part of identifier name.");
-                            Console.WriteLine("\t\tIdentifier list example: id1,id2,id3");
+                            Console.WriteLine("\t\tIdentifier list example: Column1,Column2,Column3");
                             OutputArgumentDescription("--input-file");
                             OutputArgumentDescription("--separator");
                             OutputArgumentDescription("--ignore-identifiers");
@@ -187,7 +187,7 @@ namespace CsvTools
                 case "--ignore-identifiers":
                     Console.WriteLine("\t--ignore-identifiers");
                     Console.WriteLine("\t\tTreat the first line of the CSV as a data line instead of an identifier line.");
-                    Console.WriteLine("\t\tWhen this argument is present column identifiers names are assigned as follows: id1, id2, id3...");
+                    Console.WriteLine("\t\tWhen this argument is present column identifiers names are assigned as follows: Column1, Column2, Column3...");
                     Console.WriteLine("\t\tBy default column identifiers are read from the first line of the CSV.");
                     break;
                 case "--output-file":
@@ -528,7 +528,7 @@ namespace CsvTools
             {
                 for(int i = 1; i <= maxLen; i++)
                 {
-                    identifiers.Add("id" + i.ToString());
+                    identifiers.Add("Column" + i.ToString());
                 }
             }
 

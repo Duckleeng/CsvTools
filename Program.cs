@@ -546,14 +546,7 @@ namespace CsvTools
                     validD = false;
                 }
 
-                if (validD)
-                {
-                    isNumber.Add(true);
-                }
-                else
-                {
-                    isNumber.Add(false);
-                }
+                isNumber.Add(validD);
             }
         }
 

@@ -1,17 +1,12 @@
-﻿using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using System.Data.Common;
+﻿using NCalc;
+using NCalc.Handlers;
+using System.Text.RegularExpressions;
 
 namespace CsvTools
 {
     internal class Program
     {
         const string version = "v1.0.0";
-        
-        static readonly string[] operators = { "==", "!=", "!", "<=", ">=", "<", ">", "(", ")", "||", "&&", "+", "-", "*", "/", "%", ",",
-                                                ".ToString()", ".Contains(", ".EndsWith(", ".IndexOf(", ".LastIndexOf(", ".Replace(", ".StartsWith(", ".Substring(", ".ToLower()", ".ToUpper()" };
-
-        static readonly char[] dChars = { '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 
         static char sep = ',';
         static string metadataLine = "";
@@ -546,6 +541,17 @@ namespace CsvTools
             }
         }
 
+        static void CustomFunctions(string name, FunctionArgs args)
+        {
+            if(name.Equals("tostring", StringComparison.OrdinalIgnoreCase))
+            {
+                args.Result = args.Parameters[0].ToString();
+            }else if(name.Equals("contains", StringComparison.OrdinalIgnoreCase))
+            {
+                args.Result = args.Parameters[0].ToString().Contains(args.Parameters[1].ToString()); //ignore warnings, if there is a null reference "Invalid condition!" will get called
+            }
+        }
+
         static void DeleteLines(string[] args)
         {
             //read the condition
@@ -570,125 +576,40 @@ namespace CsvTools
                 int index = 0;
                 while (index < condition.Length)
                 {
-                    bool valid = false;
-
-                    if (condition[index] == ' ')
-                    {
-                        index++;
-                        continue;
-                    }
-
-                    //identifier check
                     foreach (string identifier in identifiers)
                     {
                         if (condition.Substring(index).StartsWith(identifier))
                         {
-                            string value = $"values[{identifiers.IndexOf(identifier)}]";
-                            condition = condition.Remove(index, identifier.Length).Insert(index, value);
-                            index += value.Length;
-                            valid = true;
+                            condition = condition.Insert(index, "[");
+                            index += identifier.Length + 1;
+                            condition = condition.Insert(index, "]");
                             break;
                         }
                     }
-
-                    if (valid) continue;
-
-                    //double check
-                    string doubleValue = "";
-                    int indexBackup = index;
-                    if (condition[index] == '-')
-                    {
-                        doubleValue += '-';
-                        index++;
-                    }
-                    while (index < condition.Length && dChars.Contains(condition[index]))
-                    {
-                        doubleValue += condition[index];
-                        index++;
-                    }
-
-                    if(doubleValue != "")
-                    {
-                        valid = true;
-                        try
-                        {
-                            Convert.ToDouble(doubleValue, System.Globalization.CultureInfo.InvariantCulture);
-                        }
-                        catch
-                        {
-                            valid = false;
-                            index = indexBackup;
-                        }
-                    }
-
-                    if (valid) continue;
-
-                    //string check
-                    if (condition[index] == '\"')
-                    {
-                        index++;
-
-                        while (true)
-                        {
-                            if (index >= condition.Length)
-                            {
-                                break;
-                            }
-                            else if (condition[index] == '\"' && index + 1 < condition.Length && condition[index + 1] == '\"')
-                            {
-                                index++;
-                            }
-                            else if (condition[index] == '\"')
-                            {
-                                valid = true;
-                                index++;
-                                break;
-                            }
-                            index++;
-                        }
-                    }
-
-                    if (valid) continue;
-
-                    //operator check
-                    foreach (string op in operators)
-                    {
-                        if (condition.Substring(index).StartsWith(op))
-                        {
-                            index += op.Length;
-                            valid = true;
-                            break;
-                        }
-                    }
-
-                    if (!valid)
-                    {
-                        ExitMessage("Invalid condition!");
-                    }
+                    index++;
                 }
 
-                for(int i = 0; i < dataTypes.Count; i++)
-                {
-                    if (dataTypes[i] == "double")
-                    {
-                        condition = condition.Replace($"values[{i}]", $"System.Convert.ToDouble(values[{i}], System.Globalization.CultureInfo.InvariantCulture)");
-                    }
-                }
-
-                var script = CSharpScript.Create<bool>(condition, globalsType: typeof(ArgumentValues));
-                script.Compile();
+                Expression expression = new Expression(condition);
+                expression.EvaluateFunction += CustomFunctions;
 
                 for (int i = 0; i < data.Count; i++)
                 {
-                    ArgumentValues argumentValues = new ArgumentValues();
-                    for(int j = 0; j < data[i].Count; j++)
+                    expression.Parameters.Clear();
+                    for (int j = 0; j < data[i].Count; j++)
                     {
-                        argumentValues.values.Add(data[i][j]);
+                        if (dataTypes[j] == "double")
+                        {
+                            expression.Parameters[identifiers[j]] = Convert.ToDouble(data[i][j], System.Globalization.CultureInfo.InvariantCulture);
+                        }
+                        else
+                        {
+                            expression.Parameters[identifiers[j]] = data[i][j];
+                        }
                     }
 
                     try
                     {
-                        if (script.RunAsync(argumentValues).GetAwaiter().GetResult().ReturnValue)
+                        if (Convert.ToBoolean(expression.Evaluate()))
                         {
                             data.RemoveAt(i);
                             i--;
@@ -966,11 +887,5 @@ namespace CsvTools
             }
             return input;
         }
-    }
-
-    //used to pass values into the on-runtime compiled script to avoid recompiling it for every line
-    public class ArgumentValues
-    {
-        public List<string> values = new List<string>();
     }
 }

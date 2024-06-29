@@ -9,11 +9,10 @@
     <FileVersion>1.0.0</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Duckling</Authors>
-    <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.10.0" />
+    <PackageReference Include="NCalcSync" Version="4.3.3" />
   </ItemGroup>
 
 </Project>

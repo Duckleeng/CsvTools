@@ -47,24 +47,16 @@ namespace CsvTools
                             Console.WriteLine("\t--condition [condition] REQUIRED");
                             Console.WriteLine("\t\tBoolean expression to check for each line. If the returned value is true, the line will be deleted.");
                             Console.WriteLine("\t\tUse column identifier names as variables to refer to specific values, keep the type of the value in mind (string/double).");
-                            Console.WriteLine("\t\tCondition example: id1 == \"example\" && id2 + id3 > 5");
-                            Console.WriteLine("\t\tMethods allowed in the condition: ToString(), Contains, EndsWith, IndexOf, LastIndexOf, Replace, StartsWith, Substring, ToLower(), ToUpper()");
-                            Console.WriteLine("\t--input-file [input file] REQUIRED");
-                            Console.WriteLine("\t\tFile from which the data is read from.");
-                            Console.WriteLine("\t--output-file [output file]");
-                            Console.WriteLine("\t\tFile to which the modified data is written to.");
-                            Console.WriteLine("\t\tDefault output file: *inputfile*-Output.csv");
-                            Console.WriteLine("\t--overwrite");
-                            Console.WriteLine("\t\tOverwrite input file instead of writing to a new file.");
-                            Console.WriteLine("\t--force, -f");
-                            Console.WriteLine("\t\tDo not show overwriting confirmation prompt.");
-                            Console.WriteLine("\t--separator [separator]");
-                            Console.WriteLine("\t\tThe character that is treated as the CSV separator, takes priority over separator specified in the file.");
-                            Console.WriteLine("\t\tThe default separator is a comma (,).");
-                            Console.WriteLine("\t--ignore-identifiers");
-                            Console.WriteLine("\t\tTreat the first line of the CSV as a data line instead of an identifier line.");
-                            Console.WriteLine("\t\tWhen this argument is present column identifiers names are assigned as follows: id1, id2, id3...");
-                            Console.WriteLine("\t\tBy default column identifiers are read from the first line of the CSV.");
+                            Console.WriteLine("\t\tCondition example: id1 == 'example' && id2 + id3 > 5");
+                            Console.WriteLine("\t\tSupported methods:");
+                            Console.WriteLine("\t\t\tToString(value), Contains(string, string)");
+                            Console.WriteLine("\t\t\tNCalc Built-in Functions - https://ncalc.github.io/ncalc/articles/functions.html#built-in-functions");
+                            OutputArgumentDescription("--input-file");
+                            OutputArgumentDescription("--output-file");
+                            OutputArgumentDescription("--overwrite");
+                            OutputArgumentDescription("-f");
+                            OutputArgumentDescription("--separator");
+                            OutputArgumentDescription("--ignore-identifiers");
 
                             break;
                         case "delete-column":
@@ -77,22 +69,12 @@ namespace CsvTools
                             Console.WriteLine("\t--identifiers [identifier list] REQUIRED");
                             Console.WriteLine("\t\tList of column identifiers separated by comma that specifies which columns should be deleted.");
                             Console.WriteLine("\t\tIdentifier list example: id1,id2,id3");
-                            Console.WriteLine("\t--input-file [input file] REQUIRED");
-                            Console.WriteLine("\t\tFile from which the data is read from.");
-                            Console.WriteLine("\t--output-file [output file]");
-                            Console.WriteLine("\t\tFile to which the modified data is written to.");
-                            Console.WriteLine("\t\tDefault output file: *inputfile*-Output.csv");
-                            Console.WriteLine("\t--overwrite");
-                            Console.WriteLine("\t\tOverwrite input file instead of writing to a new file.");
-                            Console.WriteLine("\t--force, -f");
-                            Console.WriteLine("\t\tDo not show overwriting confirmation prompt.");
-                            Console.WriteLine("\t--separator [separator]");
-                            Console.WriteLine("\t\tThe character that is treated as the CSV separator, takes priority over separator specified in the file.");
-                            Console.WriteLine("\t\tThe default separator is a comma (,).");
-                            Console.WriteLine("\t--ignore-identifiers");
-                            Console.WriteLine("\t\tTreat the first line of the CSV as a data line instead of an identifier line.");
-                            Console.WriteLine("\t\tWhen this argument is present column identifiers names are assigned as follows: id1, id2, id3...");
-                            Console.WriteLine("\t\tBy default column identifiers are read from the first line of the CSV.");
+                            OutputArgumentDescription("--input-file");
+                            OutputArgumentDescription("--output-file");
+                            OutputArgumentDescription("--overwrite");
+                            OutputArgumentDescription("-f");
+                            OutputArgumentDescription("--separator");
+                            OutputArgumentDescription("--ignore-identifiers");
 
                             break;
                         case "analyze":
@@ -106,15 +88,9 @@ namespace CsvTools
                             Console.WriteLine("\t--identifiers [identifier list] REQUIRED");
                             Console.WriteLine("\t\tList of column identifiers separated by comma that specifies which columns should be analyzed.");
                             Console.WriteLine("\t\tIdentifier list example: id1,id2,id3");
-                            Console.WriteLine("\t--input-file [input file] REQUIRED");
-                            Console.WriteLine("\t\tFile from which the data is read from.");
-                            Console.WriteLine("\t--separator [separator]");
-                            Console.WriteLine("\t\tThe character that is treated as the CSV separator, takes priority over separator specified in the file.");
-                            Console.WriteLine("\t\tThe default separator is a comma (,).");
-                            Console.WriteLine("\t--ignore-identifiers");
-                            Console.WriteLine("\t\tTreat the first line of the CSV as a data line instead of an identifier line.");
-                            Console.WriteLine("\t\tWhen this argument is present column identifiers names are assigned as follows: id1, id2, id3...");
-                            Console.WriteLine("\t\tBy default column identifiers are read from the first line of the CSV.");
+                            OutputArgumentDescription("--input-file");
+                            OutputArgumentDescription("--separator");
+                            OutputArgumentDescription("--ignore-identifiers");
 
                             break;
                         default:
@@ -191,6 +167,41 @@ namespace CsvTools
         {
             Console.WriteLine(message);
             Environment.Exit(0);
+        }
+
+        static void OutputArgumentDescription(string argument)
+        {
+            switch (argument)
+            {
+                case "--input-file":
+                    Console.WriteLine("\t--input-file [input file] REQUIRED");
+                    Console.WriteLine("\t\tFile from which the data is read from.");
+                    break;
+                case "--separator":
+                    Console.WriteLine("\t--separator [separator]");
+                    Console.WriteLine("\t\tThe character that is treated as the CSV separator, takes priority over separator specified in the file.");
+                    Console.WriteLine("\t\tThe default separator is a comma (,).");
+                    break;
+                case "--ignore-identifiers":
+                    Console.WriteLine("\t--ignore-identifiers");
+                    Console.WriteLine("\t\tTreat the first line of the CSV as a data line instead of an identifier line.");
+                    Console.WriteLine("\t\tWhen this argument is present column identifiers names are assigned as follows: id1, id2, id3...");
+                    Console.WriteLine("\t\tBy default column identifiers are read from the first line of the CSV.");
+                    break;
+                case "--output-file":
+                    Console.WriteLine("\t--output-file [output file]");
+                    Console.WriteLine("\t\tFile to which the modified data is written to.");
+                    Console.WriteLine("\t\tDefault output file: *inputfile*-Output.csv");
+                    break;
+                case "--overwrite":
+                    Console.WriteLine("\t--overwrite");
+                    Console.WriteLine("\t\tOverwrite input file instead of writing to a new file.");
+                    break;
+                case "-f":
+                    Console.WriteLine("\t--force, -f");
+                    Console.WriteLine("\t\tDo not show overwriting confirmation prompt.");
+                    break;
+            }
         }
 
         static string InputFile(string[] args)

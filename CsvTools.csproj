@@ -9,6 +9,7 @@
     <FileVersion>1.0.0</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Duckling</Authors>
+    <PackageId>CsvToolsByDuckling</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

@@ -592,7 +592,7 @@ namespace CsvTools
                     index++;
                 }
 
-                Expression expression = new Expression(condition);
+                Expression expression = new Expression(condition, ExpressionOptions.AllowNullParameter);
                 expression.EvaluateFunction += CustomFunctions;
 
                 for (int i = 0; i < data.Count; i++)
@@ -602,7 +602,14 @@ namespace CsvTools
                     {
                         if (isNumber[j] == true)
                         {
-                            expression.Parameters[identifiers[j]] = Convert.ToDouble(data[i][j], System.Globalization.CultureInfo.InvariantCulture);
+                            if(data[i][j] != "")
+                            {
+                                expression.Parameters[identifiers[j]] = Convert.ToDouble(data[i][j], System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                            else
+                            {
+                                expression.Parameters[identifiers[j]] = null;
+                            } 
                         }
                         else
                         {

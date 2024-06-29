@@ -68,6 +68,7 @@ namespace CsvTools
                             Console.WriteLine("Supported arguments:");
                             Console.WriteLine("\t--identifiers [identifier list] REQUIRED");
                             Console.WriteLine("\t\tList of column identifiers separated by comma that specifies which columns should be deleted.");
+                            Console.WriteLine("\t\tSpaces are not ignored and are read as part of identifier name.");
                             Console.WriteLine("\t\tIdentifier list example: id1,id2,id3");
                             OutputArgumentDescription("--input-file");
                             OutputArgumentDescription("--output-file");
@@ -87,6 +88,7 @@ namespace CsvTools
                             Console.WriteLine("Supported arguments:");
                             Console.WriteLine("\t--identifiers [identifier list] REQUIRED");
                             Console.WriteLine("\t\tList of column identifiers separated by comma that specifies which columns should be analyzed.");
+                            Console.WriteLine("\t\tSpaces are not ignored and are read as part of identifier name.");
                             Console.WriteLine("\t\tIdentifier list example: id1,id2,id3");
                             OutputArgumentDescription("--input-file");
                             OutputArgumentDescription("--separator");
@@ -156,7 +158,7 @@ namespace CsvTools
             Console.WriteLine("CsvTools " + version);
             Console.WriteLine("REMINDER: Special characters need to be escaped to be passed as an argument!");
             Console.WriteLine();
-            Console.WriteLine("Usage: CsvTools [action] [arguments]");
+            Console.WriteLine("Usage: CsvTools [action] [--arguments]");
             Console.WriteLine();
             Console.WriteLine("Supported actions: delete-line, delete-column, analyze, help");
             Console.WriteLine("Use \"CsvTools help *action*\" for more details");

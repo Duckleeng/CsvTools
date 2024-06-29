@@ -12,7 +12,7 @@ namespace CsvTools
         static string metadataLine = "";
 
         static List<string> identifiers = new List<string>();
-        static List<string> dataTypes = new List<string>();
+        static List<bool> isNumber = new List<bool>();
         static List<List<string>> data = new List<List<string>>();
 
         static void Main(string[] args)
@@ -535,11 +535,11 @@ namespace CsvTools
 
                 if (validD)
                 {
-                    dataTypes.Add("double");
+                    isNumber.Add(true);
                 }
                 else
                 {
-                    dataTypes.Add("string");
+                    isNumber.Add(false);
                 }
             }
         }
@@ -600,7 +600,7 @@ namespace CsvTools
                     expression.Parameters.Clear();
                     for (int j = 0; j < data[i].Count; j++)
                     {
-                        if (dataTypes[j] == "double")
+                        if (isNumber[j] == true)
                         {
                             expression.Parameters[identifiers[j]] = Convert.ToDouble(data[i][j], System.Globalization.CultureInfo.InvariantCulture);
                         }
@@ -773,7 +773,7 @@ namespace CsvTools
                         ExitMessage("Identifier list is invalid.");
                     }
 
-                    if (dataTypes[identifiers.IndexOf(column)] != "double")
+                    if (isNumber[identifiers.IndexOf(column)] != true)
                     {
                         ExitMessage("All listed identifiers must be of type double.");
                     }

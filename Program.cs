@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace CsvTools
 {
-    internal class Program
+    internal partial class Program
     {
         const string version = "v1.0.0";
 
@@ -329,6 +329,9 @@ namespace CsvTools
             return ignore;
         }
 
+        [GeneratedRegex("sep=.", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+        private static partial Regex separatorRegex();
+
         static void LoadCsv(string fileName, bool ignoreLineIdentifier, bool overrideSeparator)
         {
             string[] lines = File.ReadAllLines(fileName);
@@ -341,8 +344,8 @@ namespace CsvTools
             int position = 0;
 
             bool sepDefinedInFile = false;
-
-            if (Regex.IsMatch(lines[0], "sep=."))
+            
+            if (separatorRegex().IsMatch(lines[0]))
             {
                 position++;
                 sepDefinedInFile = true;

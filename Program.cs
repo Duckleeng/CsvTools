@@ -960,9 +960,9 @@ namespace CsvTools
 
         static string AddQuotes(string input, bool force = false)
         {
-            if(input.Contains("\"") || input.Contains(sep) || input.Contains(Environment.NewLine) || force)
+            if(input.Contains('\"') || input.Contains(sep) || input.Contains(Environment.NewLine) || force)
             {
-                input = "\"" + input + "\"";
+                input = '\"' + input + '\"';
             }
             return input;
         }

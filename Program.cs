@@ -48,7 +48,7 @@ namespace CsvTools
                             Console.WriteLine("\t\tBoolean expression to check for each line. If the returned value is true, the line will be deleted.");
                             Console.WriteLine("\t\tUse column identifier names as variables to refer to specific values, keep the type of the value in mind (string/double).");
                             Console.WriteLine("\t\tCondition example: Column1 == 'example' && Column2 + Column3 > 5");
-                            Console.WriteLine("\t\tSupported methods:");
+                            Console.WriteLine("\t\tSupported functions:");
                             Console.WriteLine("\t\t\tToString(value), Contains(string, string)");
                             Console.WriteLine("\t\t\tNCalc Built-in Functions - https://ncalc.github.io/ncalc/articles/functions.html#built-in-functions");
                             OutputArgumentDescription("--input-file");
